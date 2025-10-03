@@ -21,7 +21,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 # Replace paths with your actual CSV files
 
 url = "https://drive.google.com/file/d/1d38o6a9o5MHzO8JSRR8t8PX8vtrFpI4B/view?usp=drive_link"
-data = pd.read_csv(url)
+
+data = pd.read_csv(url, encoding='utf-8', sep=',', error_bad_lines=False)
 spotify_tracks = pd.read_csv("spotify_tracks.csv")
 
 # ================== Functions ==================
