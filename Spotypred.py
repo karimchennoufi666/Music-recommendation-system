@@ -1,4 +1,4 @@
-# spotify_recs_app.py
+# spotify_recs_app_fixed.py
 
 import streamlit as st
 import pandas as pd
@@ -18,20 +18,32 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 ))
 
 # ================== Load your datasets ==================
-# Replace paths with your actual CSV files
+# Google Drive CSV raw download link
+url = "https://drive.google.com/uc?export=download&id=1d38o6a9o5MHzO8JSRR8t8PX8vtrFpI4B"
 
-url = "https://drive.google.com/file/d/1d38o6a9o5MHzO8JSRR8t8PX8vtrFpI4B/view?usp=drive_link"
+# Load main dataset
+try:
+    data = pd.read_csv(url, encoding='utf-8', sep=',', on_bad_lines='skip')
+except UnicodeDecodeError:
+    data = pd.read_csv(url, encoding='latin1', sep=',', on_bad_lines='skip')
 
-data = pd.read_csv(url, encoding='utf-8', sep=',', on_bad_lines='skip')
-print(data.head())
+# Load local Spotify tracks dataset
 spotify_tracks = pd.read_csv("spotify_tracks.csv")
+
+# Normalize column names
+data.columns = data.columns.str.strip().str.lower()
+spotify_tracks.columns = spotify_tracks.columns.str.strip().str.lower()
 
 # ================== Functions ==================
 def get_song_data(song, dataset):
     """Get song data from dataset or Spotify API"""
+    if "name" not in dataset.columns:
+        return None
+
     row = dataset[dataset["name"].str.lower() == song.lower()]
     if not row.empty:
         return row.iloc[0].to_dict()
+
     try:
         results = sp.search(q=f"track:{song}", type="track", limit=1)
         tracks = results["tracks"]["items"]
@@ -45,8 +57,10 @@ def get_song_data(song, dataset):
                 "album": track["album"]["name"],
                 "release_date": track["album"]["release_date"],
             }
-    except:
+    except Exception as e:
+        print(f"Spotify API error: {e}")
         return None
+
     return None
 
 def get_mean_vector(song_list, dataset, feature_cols):
@@ -93,9 +107,10 @@ feature_columns = [
 st.title("🎵 Spotify Song Recommendation System")
 
 # Seed songs input
+default_songs = spotify_tracks["name"].tolist()[:5] if "name" in spotify_tracks.columns else []
 seed_songs_input = st.text_area(
     "Enter your favorite songs (one per line):",
-    value="\n".join(spotify_tracks["name"].tolist()[:5])
+    value="\n".join(default_songs)
 )
 
 # Number of recommendations
@@ -115,4 +130,4 @@ if st.button("Generate Recommendations"):
             else:
                 st.subheader("Recommended Songs:")
                 for idx, row in recommendations.iterrows():
-                    st.markdown(f"**{row['name']}** by {', '.join(row['artists'])}  \nSimilarity: {row['similarity']:.2f}")
+                    st.markdown(f"**{row['name']}** by {', '.join(row['artists'])}  \nSimilarity: {row['simila
