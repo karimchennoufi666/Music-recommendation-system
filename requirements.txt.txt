@@ -1,0 +1,10 @@
+streamlit
+pandas 
+numpy
+sklearn.metrics.pairwise
+cosine_similarity
+collections
+defaultdict
+spotipy
+spotipy.oauth2
+SpotifyClientCredentials
