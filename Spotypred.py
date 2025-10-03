@@ -19,8 +19,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 
 # ================== Load your datasets ==================
 # Replace paths with your actual CSV files
-data = pd.read_csv(data (2).csv)
-spotify_tracks = pd.read_csv(spotify_tracks.csv)
+data = pd.read_csv("data (2).csv")
+spotify_tracks = pd.read_csv("spotify_tracks.csv")
 
 # ================== Functions ==================
 def get_song_data(song, dataset):
