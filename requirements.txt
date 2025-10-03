@@ -1,11 +1,5 @@
 streamlit
-pandas 
+pandas
 numpy
 scikit-learn
-sklearn.metrics.pairwise
-cosine_similarity
-collections
-defaultdict
 spotipy
-spotipy.oauth2
-SpotifyClientCredentials
