@@ -22,11 +22,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 
 url = "https://drive.google.com/file/d/1d38o6a9o5MHzO8JSRR8t8PX8vtrFpI4B/view?usp=drive_link"
 
-    data = pd.read_csv(url, encoding='utf-8', sep=',', on_bad_lines='skip')
-except UnicodeDecodeError:
-    # fallback in case of encoding issues
-    data = pd.read_csv(url, encoding='utf-8', sep=',', on_bad_lines='skip')
-
+data = pd.read_csv(url, encoding='utf-8', sep=',', on_bad_lines='skip')
 print(data.head())
 spotify_tracks = pd.read_csv("spotify_tracks.csv")
 
