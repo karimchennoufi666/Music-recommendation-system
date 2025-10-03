@@ -130,4 +130,7 @@ if st.button("Generate Recommendations"):
             else:
                 st.subheader("Recommended Songs:")
                 for idx, row in recommendations.iterrows():
-                    st.markdown(f"**{row['name']}** by {', '.join(row['artists'])}  \nSimilarity: {row['simila
+                    st.markdown(
+    f"**{row['name']}** by {', '.join(row['artists'])}  \nSimilarity: {row['similarity']:.2f}"
+)
+
